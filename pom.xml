@@ -11,8 +11,8 @@
     <groupId>com.example</groupId>
     <artifactId>recipe</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>recipe</name>
-    <description>Demo project for Spring Boot</description>
+    <name>recipe-app</name>
+    <description>Recipes Application</description>
     <properties>
         <java.version>11</java.version>
     </properties>
