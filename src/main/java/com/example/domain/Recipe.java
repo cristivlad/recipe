@@ -20,7 +20,7 @@ public class Recipe {
     private Integer servings;
     private String source;
     private String url;
-    @Column(length = 1500)
+    @Lob
     private String directions;
 
     @Enumerated(value = EnumType.STRING)
