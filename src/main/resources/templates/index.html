@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title>Recipe Home</title>
-
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg320mUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-          integrity="sha384-Tc5IQib027qvyjSMfhj0MaLkfuWVxZxUPnCJA7l2nCWNIpG9mGCD8wGNIcPD7Txa"
-          crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"
+        th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}">
+  <script src="/webjars/jquery/3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+          integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"
+          th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>
 </head>
 <body>
 
@@ -17,19 +18,24 @@
     <div class="col-md-6 col-md-offset-3">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <h1>My recipes! </h1>
+          <h1 class="panel-title">My recipes! </h1>
         </div>
         <div class="panel-body">
           <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
-            <table class="thead-inverse">
-            <tr>
-              <th>ID</th>
-              <th>Description</th>
-            </tr>
-            <tr th:each="recipe : ${recipes}">
-              <td th:text="${recipe.id}">123</td>
-              <td th:text="${recipe.description}">Niom Niom</td>
-            </tr>
+            <table class="table table-hover">
+              <thead class="thead-inverse">
+                <tr>
+                  <th>ID</th>
+                  <th>Description</th>
+                  <th>View</th>
+                </tr>
+              </thead>
+              <tr th:each="recipe : ${recipes}">
+                <!--/*@thymesVar id="recipe" type="com.example.domain.Recipe"*/-->
+                <td th:text="${recipe.id}">123</td>
+                <td th:text="${recipe.description}">Niom Niom</td>
+                <td><a href="#" th:href="@{/recipe/show/{id}(id=${recipe.id})}">View</a></td>
+              </tr>
             </table>
           </div>
         </div>
