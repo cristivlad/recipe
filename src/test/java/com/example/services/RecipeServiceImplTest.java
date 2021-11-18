@@ -1,5 +1,6 @@
 package com.example.services;
 
+import com.example.commands.RecipesCommand;
 import com.example.converters.RecipeCommandToRecipe;
 import com.example.converters.RecipeToRecipeCommand;
 import com.example.domain.Recipe;
@@ -53,6 +54,27 @@ class RecipeServiceImplTest {
     }
 
     @Test
+    public void getRecipeCommandByIdTest() {
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        Optional<Recipe> recipeOptional = Optional.of(recipe);
+
+        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+
+        RecipesCommand recipesCommand = new RecipesCommand();
+        recipesCommand.setId(1L);
+
+        when(recipeToRecipeCommand.convert(any())).thenReturn(recipesCommand);
+
+        RecipesCommand commandById = recipeService.findCommandById(1L);
+
+        assertNotNull(commandById);
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, never()).findAll();
+    }
+
+
+    @Test
     void testGetRecipes() throws Exception {
 
         Recipe recipe = new Recipe();
@@ -66,5 +88,13 @@ class RecipeServiceImplTest {
         assertEquals(recipeSet.size(),1);
         verify(recipeRepository,times(1)).findAll();
 
+    }
+
+    @Test
+    void testDeleteById() {
+        Long idToDelete = 2L;
+        recipeService.deleteById(idToDelete);
+
+        verify(recipeRepository, times(1)).deleteById(anyLong());
     }
 }
