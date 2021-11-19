@@ -2,6 +2,7 @@ package com.example.converters;
 
 import com.example.commands.IngredientsCommand;
 import com.example.domain.Ingredient;
+import com.example.domain.Recipe;
 import com.google.common.base.Preconditions;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
@@ -19,7 +20,6 @@ public class IngredientCommandToIngredient implements Converter<IngredientsComma
         this.uomConverter = uomConverter;
     }
 
-    @Synchronized
     @Nullable
     @Override
     public Ingredient convert(IngredientsCommand source) {
@@ -29,6 +29,12 @@ public class IngredientCommandToIngredient implements Converter<IngredientsComma
 
         final Ingredient ingredient = new Ingredient();
         ingredient.setId(source.getId());
+        if(source.getRecipeId() != null) {
+            Recipe recipe = new Recipe();
+            recipe.setId(source.getRecipeId());
+            ingredient.setRecipe(recipe);
+            recipe.addIngredient(ingredient);
+        }
         ingredient.setDescription(source.getDescription());
         ingredient.setAmount(source.getAmount());
         ingredient.setUom(uomConverter.convert(source.getUom()));
