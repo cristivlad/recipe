@@ -1,6 +1,8 @@
 package com.example.controllers;
 
 import com.example.commands.IngredientsCommand;
+import com.example.commands.RecipesCommand;
+import com.example.commands.UnitOfMeasureCommand;
 import com.example.domain.UnitOfMeasure;
 import com.example.services.IngredientService;
 import com.example.services.RecipeService;
@@ -54,6 +56,21 @@ public class IngredientController {
         return "recipe/ingredient/ingredientForm";
     }
 
+    @GetMapping
+    @RequestMapping("/recipe/{recipeId}/ingredient/new")
+    public String newRecipe(@PathVariable String recipeId, Model model) {
+        RecipesCommand recipesCommand = recipeService.findCommandById(Long.valueOf(recipeId));
+        //toDo raise exception if null
+        IngredientsCommand ingredientsCommand = new IngredientsCommand();
+        ingredientsCommand.setRecipeId(Long.valueOf(recipeId));
+        model.addAttribute("ingredient", ingredientsCommand);
+
+        ingredientsCommand.setUom(new UnitOfMeasureCommand());
+        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+
+        return "recipe/ingredient/ingredientForm";
+    }
+
     @PostMapping("recipe/{recipeId}/ingredient")
     public String saveOrUpdate(@ModelAttribute IngredientsCommand command) {
         IngredientsCommand savedCommand = ingredientService.saveIngredientCommand(command);
@@ -62,5 +79,15 @@ public class IngredientController {
         log.debug("Saved ingredient id: " + savedCommand.getId());
 
         return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";
+    }
+
+    @GetMapping
+    @RequestMapping("/recipe/{recipeId}/ingredient/{id}/delete")
+    public String deleteIngredientById(@PathVariable String recipeId,
+                                       @PathVariable String id) {
+        log.debug("Deleting ingredient id: " + id);
+
+        ingredientService.deleteIngredientById(Long.valueOf(recipeId), Long.valueOf(id));
+        return "redirect:/recipe/" + recipeId + "/ingredients";
     }
 }
